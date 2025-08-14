@@ -188,34 +188,5 @@ plot(res_3pl_1, type = "IIC", legend = T)
 anaitem <- as.data.frame(coef(res_3pl_1))
 rownames(anaitem)
 anaitem[order(anaitem$Dscrmn),  ]
-## Information at 3.5SD
-anaitem$info <- NULL
-anaitem$names <- NULL
-set.seed(1234)
-for (i in 1:ncol(dat_1)) {
-  anaitem$names[i] <- rownames(anaitem)[i] 
-  anaitem$info[i] <- round(100 * unlist(information(res_3pl_1, c(-3.5,3.5), items = i))$PropRange)
-}
 
-# Equating
 
-bienestar.est <- scale(theta.est)
-hist(bienestar.est)
-dificultad.est <- scale(beta.est)
-hist(dificultad.est)
-
-score <- 5 + 2 * bienestar.est
-mean(score)
-sd(score)
-hist(score, breaks = 10)
-summary(score)
-
-Tercil <- cut(score, breaks = c(quantile(score, probs = seq(0, 1, by = 0.333))), 
-              labels=c("1T","2T","3T"), include.lowest=TRUE)
-boxplot(score ~ Tercil)
-
-Cluster <- kmeans(score, 3)$cluster
-boxplot(score ~ Cluster)
-
-summary(Cluster)
-table(Cluster)
